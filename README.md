@@ -1,5 +1,6 @@
 崩溃早八还要工作<br>
-**Functional Requirements**
+<br>
+**Functional Requirements**  
 User Authentication  
 The system should allow users to log in using their own unique account, making sure that each user’s information is safely.
 
