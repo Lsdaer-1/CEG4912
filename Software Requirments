@@ -1,35 +1,37 @@
 Functional Requirements
+
 User Authentication
-The system should allow users to log in using their own unique credentials, making sure that each user’s information is safely protected through encryption.
+The system should allow users to log in using unique credentials for each individual user.
 
 QR Code Scanning
-Users can simply scan a QR code at the library entrance to access the book search interface, making the process smooth and convenient.
+Users will access the book search interface by scanning a QR code placed at the library entrance.
 
 Book Search
-Users should be able to search for books by typing the title, author, or ISBN. The system will show each book’s availability status and exact location.
+Users should be able to search for books by entering the title, author name, or book number. The system will display the availability status of each book.
 
 Book Availability Check
-When users search for a book, the system will check its availability in real time and display whether it’s on the shelf. If the book is checked out, it will provide the expected return date.
+When users search for a book, the system must verify its availability. If a book is checked out, the system should show the expected return date.
 
 Book Location Identification
-The system should pinpoint the exact location of the book, including its shelf number and row, so that the retrieval process is as efficient as possible.
+The system must determine the exact physical location of the book, indicating its specific shelf position.
 
 Automated Book Retrieval
-The robotic arm should pick up the requested book accurately based on the system’s instructions and then deliver it to a designated collection point.
-
-Book Reservation
-If a book is not currently available, users should have the option to reserve it. The system will save the reservation and send a notification when the book becomes available.
-
-User Notifications
-Users will receive timely notifications through email or the web interface whenever their requested book is ready for pickup or when there is an update on their reserved books.
+The robotic arm should accurately pick up the requested book according to the system’s instructions and deliver it to a designated collection area.
 
 Book Pickup Confirmation
-After the user collects the book, the system should confirm the pickup and update the inventory to reflect the change.
+After users collect the book, the system must confirm the pickup status and update the inventory to reflect the transaction.
 
-User Session Management
-The system should manage each user’s session securely until they manually log out or until the session times out, ensuring safety and ease of use.
+Book Borrowing/Returning Process
+The system must update the status of a book in the database when it is borrowed/returned.
 
-Non-Functional Requirements
+Multi-Language Support
+The system should support a range of languages to accommodate various user groups.
+
+User Preference Management
+The system should enable users to set and manage their preferences, such as preferred languages and notification settings.
+
+
+Non-Functional Requirements:
 Performance
 The system should respond to user requests within 3 seconds for the majority of the users to maintain a positive experience.
 
