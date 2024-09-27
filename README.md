@@ -56,4 +56,3 @@ The system will comply with GDPR data privacy regulations to safeguard user data
 
 Resource Constraint  
 The system’s CPU and memory usage should remain within 70% of capacity during peak usage times to avoid slowing down the service.
-=======
