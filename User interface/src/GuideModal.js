@@ -33,7 +33,7 @@ function GuideModal({ isOpen, onRequestClose }) {
     onRequestClose();
   };
   const handleInputChange = (event) => {
-    setSearchText(event.target.value);  // 更新用户输入的值
+    setSearchText(event.target.value);  
   };
 
   return (
@@ -47,54 +47,54 @@ function GuideModal({ isOpen, onRequestClose }) {
       <div className="modal-body">
         <h2>Category Search</h2>
         <label>
-          Type to search blogs:
+          Type to search books:
           <input type="text" name="search" className="search-input" value={searchText}   onChange={handleInputChange}   />
           </label>
         <ul className="category-list">
           <li>
             <input
               type="checkbox"
-              name="Daily Life"
+              name="Literature & Fiction"
               onChange={handleCheckboxChange}
               className="category-checkbox"
             />
-            Daily Life
+            Literature & Fiction
             <ul>
               <li>
                 <input
                   type="checkbox"
-                  name="Building/Residences"
+                  name="Classic Literature"
                   onChange={handleCheckboxChange}
                   className="subcategory-checkbox"
                 />
-                Building/Residences
+                Classic Literature
                 <ul>
                   <li>
                     <input
                       type="checkbox"
-                      name="Apartments"
+                      name="British Literature"
                       onChange={handleCheckboxChange}
                       className="subcategory-checkbox"
                     />
-                    Apartments
+                    British Literature
                   </li>
                   <li>
                     <input
                       type="checkbox"
-                      name="Dormitory"
+                      name="American Literature"
                       onChange={handleCheckboxChange}
                       className="subcategory-checkbox"
                     />
-                    Dormitory
+                    American Literature
                   </li>
                   <li>
                     <input
                       type="checkbox"
-                      name="Shared"
+                      name="Russian Literature"
                       onChange={handleCheckboxChange}
                       className="subcategory-checkbox"
                     />
-                    Shared
+                    Russian Literature
                   </li>
                 </ul>
               </li>
@@ -105,54 +105,54 @@ function GuideModal({ isOpen, onRequestClose }) {
                   onChange={handleCheckboxChange}
                   className="subcategory-checkbox"
                 />
-                Shopping
+                Science Fiction
                 <ul>
                   <li>
                     <input
                       type="checkbox"
-                      name="Supermarket"
+                      name="Dystopian Fiction"
                       onChange={handleCheckboxChange}
                       className="subcategory-checkbox"
                     />
-                    Supermarket
+                    Dystopian Fiction
                   </li>
                   <li>
                     <input
                       type="checkbox"
-                      name="Shopping Mall"
+                      name="Space Opera"
                       onChange={handleCheckboxChange}
                       className="subcategory-checkbox"
                     />
-                    Shopping Mall
+                    Space Opera
                   </li>
                 </ul>
               </li>
               <li>
                 <input
                   type="checkbox"
-                  name="Gastronomy"
+                  name="Fantasy"
                   onChange={handleCheckboxChange}
                   className="subcategory-checkbox"
                 />
-                Gastronomy
+                Fantasy
                 <ul>
                   <li>
                     <input
                       type="checkbox"
-                      name="Restaurant"
+                      name="Urban Fantasy"
                       onChange={handleCheckboxChange}
                       className="subcategory-checkbox"
                     />
-                    Restaurant
+                    Urban Fantasy
                   </li>
                   <li>
                     <input
                       type="checkbox"
-                      name="Take Away"
+                      name="Epic Fantasy"
                       onChange={handleCheckboxChange}
                       className="subcategory-checkbox"
                     />
-                    Take Away
+                    Epic Fantasy
                   </li>
                 </ul>
               </li>
@@ -161,67 +161,67 @@ function GuideModal({ isOpen, onRequestClose }) {
           <li>
             <input
               type="checkbox"
-              name="Local Cultural Events"
+              name="Children's Books"
               onChange={handleCheckboxChange}
               className="category-checkbox"
             />
-            Local Cultural Events
+            Children's Books
             <ul>
               <li>
                 <input
                   type="checkbox"
-                  name="Festivals"
+                  name="Fairy Tales"
                   onChange={handleCheckboxChange}
                   className="subcategory-checkbox"
                 />
-                Festivals
+                Fairy Tales
               </li>
               <li>
                 <input
                   type="checkbox"
-                  name="Concerts"
+                  name="Educational Books"
                   onChange={handleCheckboxChange}
                   className="subcategory-checkbox"
                 />
-                Concerts
+                Educational Books
               </li>
               <li>
                 <input
                   type="checkbox"
-                  name="Cultural Exhibitions"
+                  name="Adventure Stories"
                   onChange={handleCheckboxChange}
                   className="subcategory-checkbox"
                 />
-                Cultural Exhibitions
+                Adventure Stories
               </li>
             </ul>
           </li>
           <li>
             <input
               type="checkbox"
-              name="Social Networking"
+              name="Academic & Educational"
               onChange={handleCheckboxChange}
               className="category-checkbox"
             />
-            Social Networking
+            Academic & Educational
             <ul>
               <li>
                 <input
                   type="checkbox"
-                  name="Meet Offline"
+                  name="Mathematics"
                   onChange={handleCheckboxChange}
                   className="subcategory-checkbox"
                 />
-                Meet Offline
+                Mathematics
               </li>
               <li>
                 <input
                   type="checkbox"
-                  name="Find Friends Online"
+                  name="Computer Science"
                   onChange={handleCheckboxChange}
                   className="subcategory-checkbox"
                 />
-                Find Friends Online
+                Computer Science
               </li>
             </ul>
           </li>
