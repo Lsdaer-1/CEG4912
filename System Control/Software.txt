@@ -1,103 +1,28 @@
-### **System Control Design for Automated Book Retrieval System**
+System Control Functions 
 
-The system control design is the core that manages the interaction between the software and hardware components, ensuring seamless operation of the Automated Book Retrieval System. It involves coordinating the movement of the robotic arm, handling sensor feedback, executing user commands, and ensuring safe operation through an intelligent control unit. The control system is structured around three main layers: **User Interface Layer**, **Command Processing Layer**, and **Motion Control Layer**. This multi-layered approach allows for real-time response, high-level precision, and safe operations, enhancing the overall efficiency and reliability of the system.
+User Interface Layer
+The User Interface Layer serves as the interaction point between the user and the system. Through a web-based interface, users can log in, search for books, and initiate retrieval commands. Once a user scans a QR code and selects a book, a retrieval request is sent to the backend server and forwarded to the control unit. This layer’s primary functions include managing user authentication, processing book search queries, and sending real-time updates such as book availability and retrieval status.
 
----
+Command Processing Layer
+The Command Processing Layer translates high-level user commands into actionable tasks for the hardware. Upon receiving a retrieval command, it breaks down the request into smaller motion tasks, such as aligning the robotic arm horizontally, adjusting the arm vertically, and engaging the gripper mechanism. It continuously monitors sensor inputs to ensure that each action is executed safely and correctly. This layer is also responsible for path planning, motion sequencing, and handling any safety interruptions or errors detected during the process. Status updates are sent back to the User Interface Layer to inform the user about the progress of the retrieval.
 
-### **1. Control Unit Overview**
+Motion Control Layer
+The Motion Control Layer handles direct execution of motor commands and sensor data processing. It controls the linear actuator for horizontal positioning, the vertical actuator for arm height adjustment, and the gripper mechanism for handling books. Sensor feedback, such as distance measurements and book alignment checks, is used to refine movements in real time, ensuring accurate and synchronized operation of all components. This layer adjusts speed and position dynamically based on environmental conditions to achieve optimal performance.
 
-The central controller of the system is an **STM32 microcontroller**, which is responsible for executing commands, processing sensor inputs, and managing all motion components. The control unit communicates with the backend server via a Wi-Fi module, receiving book retrieval requests and sending back real-time status updates. The control system is equipped with an efficient **Real-Time Operating System (RTOS)**, allowing it to prioritize critical tasks such as motion control and safety monitoring while handling less time-sensitive tasks like data logging.
 
-The system also features dedicated drivers for each motor, including stepper motor drivers for the linear actuator and robotic arm, as well as a gripper control module. Each of these drivers receives pulse-width modulation (PWM) signals from the STM32, which translate into precise motor movements. The system utilizes an I2C or SPI communication protocol to interface with sensors, ensuring rapid data acquisition and minimal latency during critical operations.
 
----
+System Operation Workflow
+Book Search and Request
+When a user logs in and searches for a book, the system verifies its availability. If the book is available, the user initiates a retrieval request. This command is transmitted to the STM32 control unit, which processes the request and prepares the hardware for retrieval.
 
-### **2. Control System Architecture**
+Positioning the Robotic Arm
+The command processing layer calculates the optimal path and sends movement instructions to the motion control layer. The linear actuator moves the robotic arm horizontally to align with the target shelf. The arm’s vertical actuator then positions it at the correct height. Proximity sensors validate the arm’s position, and the control unit ensures the arm is accurately aligned before proceeding.
 
-The system control is structured into three main layers:
+Book Gripping and Pickup
+Once the arm is in position, the gripper mechanism is activated. The gripper uses its infrared sensors to confirm the book’s alignment and then gently closes around the book’s spine. Pressure sensors within the gripper measure the applied force to prevent damage. After a secure grip is achieved, the control unit signals the robotic arm to retract.
 
-#### **1. User Interface Layer**
-This layer is the bridge between the user and the control system. It includes a web-based interface that allows users to log in, search for books, and initiate retrieval commands. After a user scans the QR code and inputs a book request, the command is transmitted to the backend server, which then forwards the command to the STM32 control unit.
+Book Delivery and User Confirmation
+The robotic arm retracts and moves the gripped book to the designated collection point. Upon placing the book, the system sends a final confirmation to the user interface, notifying the user that the book is ready for pickup. The status is updated in real-time, and the system awaits the user’s acknowledgment.
 
-- **Functions**:  
-  - User Login and Authentication  
-  - Book Search and Selection  
-  - Initiate Book Retrieval Requests  
-  - Real-time Status Monitoring  
-
-- **Communication Protocol**:  
-  - **RESTful API** for data exchange between the web interface, backend, and control unit  
-  - **Wi-Fi Module** on STM32 for real-time command reception and status updates  
-
----
-
-#### **2. Command Processing Layer**
-The command processing layer is where the high-level instructions received from the user are translated into specific motion sequences for the robotic arm and gripper. It receives book retrieval commands from the User Interface Layer and breaks them down into a series of tasks, such as positioning the arm horizontally, adjusting the vertical reach, and activating the gripper mechanism. This layer also monitors sensor inputs to ensure that each command is executed safely and correctly.
-
-- **Functions**:  
-  - Command Parsing and Scheduling  
-  - Path Planning and Motion Sequencing  
-  - Error Handling and Safety Checkpoints  
-
-- **Feedback Mechanism**:  
-  - Continuously monitors sensor data to validate the completion of each task before moving to the next step.  
-  - Sends status updates back to the User Interface Layer, such as "In Progress," "Book Picked," and "Ready for Pickup."
-
-- **Safety Protocols**:  
-  - Implements emergency stop commands if a potential collision or overload is detected.  
-  - Uses watchdog timers to detect stalled or unresponsive components.
-
----
-
-#### **3. Motion Control Layer**
-The motion control layer handles low-level execution of motor commands and real-time sensor data processing. It is directly linked to all motion components, including the linear actuator for horizontal movement, the vertical actuator for arm positioning, and the gripper mechanism. This layer is responsible for maintaining precision in movement, speed control, and ensuring that all actions are synchronized.
-
-- **Linear Actuator Control**:  
-  - Receives pulse commands to control the stepper motor’s speed and position for accurate horizontal alignment.  
-  - Adjusts speed dynamically based on feedback from proximity sensors to prevent overshoot.
-
-- **Robotic Arm Control**:  
-  - Handles vertical positioning using PWM signals for precise motion, ensuring smooth operation along the Y-axis.  
-  - Manages rotational alignment of the arm to adjust the orientation of the gripper when needed.
-
-- **Gripper Control**:  
-  - Uses analog signals to adjust the gripping force based on real-time sensor feedback.  
-  - Monitors pressure sensors to prevent excessive force, automatically releasing the book if needed.
-
-- **Sensor Integration**:  
-  - Real-time data from proximity sensors, vision cameras, and infrared sensors is processed to determine the exact location of the book.  
-  - Feedback is used to adjust movements dynamically, ensuring the gripper reaches the correct book position before engaging.
-
----
-
-### **3. System Operation Workflow**
-
-1. **Book Search and Request**:  
-   - The user searches for a book through the web interface, which sends the book ID and location request to the backend server.  
-   - The server processes the request and sends the retrieval command to the STM32 control unit.
-
-2. **Positioning the Robotic Arm**:  
-   - The command processing layer breaks down the retrieval command into a series of motion steps.  
-   - The linear actuator moves the arm horizontally to align with the correct shelf position.  
-   - The vertical actuator positions the arm to the appropriate height.
-
-3. **Book Gripping and Pickup**:  
-   - The control unit activates the gripper mechanism and uses infrared sensors to confirm alignment.  
-   - The gripper gently closes around the book, and pressure sensors verify the correct force is applied.  
-   - Once the book is securely gripped, the control unit sends a confirmation signal.
-
-4. **Book Delivery and User Confirmation**:  
-   - The arm retracts and places the book at the designated collection point.  
-   - A final status update is sent to the user interface, notifying the user that the book is ready for pickup.
-
-5. **System Idle and Recharging**:  
-   - After completing the operation, the control unit enters a low-power idle state.  
-   - The robotic arm returns to its default position and initiates wireless charging if the battery is low.
-
----
-
-### **4. Safety and Error Management**
-
-The system control design includes multiple safety features and error management protocols to ensure reliable operation. It uses a **watchdog timer** to monitor system health and detect unresponsive components. If a potential collision is detected through proximity sensors, the control unit immediately halts all movements. Similarly, if the gripper detects an object larger than its capacity, it triggers an automatic release to prevent mechanical damage. All safety-critical operations are logged and reported to the backend server for analysis and troubleshooting.
-
-This control system design ensures that the Automated Book Retrieval System operates smoothly, safely, and efficiently, delivering a seamless user experience with precise and reliable book retrieval.       只写关于系统的功能以及工作流程
+System Idle and Recharging
+After completing the retrieval operation, the control unit sets the system to an idle state. The robotic arm returns to its default position, and if the battery is low, the system initiates automatic recharging using the wireless charging station. The system remains in standby mode until the next command is received.
