@@ -1,0 +1,17 @@
+{
+    "welcome": "Bienvenue à Intelligent Book Management System",
+    "signIn": "Se connecter",
+    "faq": "FAQ",
+    "booksearch":"Recherche de livres",
+    "createActivity": "Emprunter des livres",
+    "welcome2":"Le système intelligent de gestion des livres existe pour servir tout le monde, nous prenons maintenant en charge le service automatique de retrait et de retour des livres, vous pouvez également vérifier la date d'emprunt des livres et l'heure de retour des livres en ligne. Bienvenue sur le site !",
+    "act":"Livres recommandés",
+    "act2":"En fonction de vos préférences et de vos choix, nous vous recommandons les ouvrages suivants.",
+    "act3":"Cliquez pour plus de détails",
+    "gu1": "Barre de recherche",
+    "gu2": "Vous pouvez rechercher ce que vous voulez en utilisant le bouton Barre de recherche de la barre de navigation.",
+    "f1": "Courriel : aaaaa@gmail.com",
+    "f2":"Suivez-nous sur X",
+    "f3":"Contact",
+    "f4":"2024 Mon site web. Tous droits réservés."
+  }

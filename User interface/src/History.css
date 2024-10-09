@@ -1,0 +1,55 @@
+.history-container {
+    padding: 20px;
+  }
+  
+  .history-container h2 {
+    margin-bottom: 20px;
+  }
+  
+  .history-container ul {
+    list-style: none;
+    padding: 0;
+  }
+  
+  .history-item {
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    padding: 15px;
+    margin-bottom: 10px;
+    border-radius: 5px;
+    position: relative;
+  }
+  
+  .history-item p {
+    margin: 5px 0;
+  }
+  .returned-badge {
+   
+    padding: 5px 10px;
+    background-color: #28a745;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    position: absolute;
+    right: 20px;
+    top: 40px;
+  }
+  
+  
+  .history-item button {
+    background-color: #007bff;
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    position: absolute;
+    right: 20px;
+    top: 20px;
+  }
+  
+  .history-item button:hover {
+    background-color: #0056b3;
+  }
+  

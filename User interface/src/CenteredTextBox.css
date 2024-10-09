@@ -1,0 +1,30 @@
+/* CenteredTextBox.css */
+.centered-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+ 
+    width: 100vw; 
+    background-color: #f0f0f0;
+    margin: 0;
+    padding: 0;
+  }
+  
+  .centered-text-box {
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    
+    text-align: left;
+    
+  }
+  
+  .centered-text-box h2 {
+    margin-bottom: 20px;
+  }
+  
+  .centered-text-box p {
+    font-size: 1.2em;
+    line-height: 1.5;
+  }
+  

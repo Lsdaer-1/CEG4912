@@ -1,0 +1,14 @@
+.photo-carousel {
+    width: 90;
+    height: 600px;
+    overflow: hidden;
+    position: relative;
+    margin: 0 auto;
+  }
+  
+  .photo-carousel img {
+    width: 100%;
+    height: auto;
+    display: block;
+  }
+  

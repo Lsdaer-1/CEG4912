@@ -1,0 +1,17 @@
+{
+    "welcome": "Welcome to Intelligent Book Management System",
+    "signIn": "Sign In",
+    "faq": "FAQ",
+    "booksearch":"Book search",
+    "createActivity": "Borrow Books",
+    "welcome2":"Intelligent Book Management System exists to serve all people, we now support machine automatic book pickup and return service, you can also check the date of borrowing books and check the time of returning books online. Welcome to use!",
+    "act":"Recommended Books",
+    "act2":"Depending on your preferences and choices, we recommend these books.",
+    "act3":"Click for detil",
+    "gu1": "Search bar",
+    "gu2": "You can search for what you want by using the Book search button on the navigation bar.",
+    "f1":"Email : aaaaa@gmail.com",
+    "f2":"Follow us on X",
+    "f3":"Contact",
+    "f4":"2024 My Website. All rights reserved."
+  }
