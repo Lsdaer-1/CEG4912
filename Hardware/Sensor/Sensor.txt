@@ -1,0 +1,308 @@
+#include <Arduino.h>
+#include <WiFiClientSecure.h>
+#include <HTTPClient.h>
+#include <WiFi.h>
+
+
+
+
+#define SENSOR_PIN  34  // 红外传感器连接到GPIO 25
+#define LED_ROW_PIN 32  // GPIO 32，行数控制LED1
+#define LED_COL_PIN 12  // GPIO 12，列数控制LED2
+#define LED_COMPLETE_PIN 27  // GPIO 27，行列完成指示LED3
+#define DIST_THRESHOLD 1000  // 阈值，根据实际传感器的反应调整
+
+
+
+
+//wifi credentials
+const char *ssid = "iPhone 14";
+const char *password = "1234567890";
+const char *OCR_API_URL = "https://api.ocr.space/Parse/Image";
+const char *API_KEY = "K86478515288957";
+
+WiFiServer server(23456); 
+//const char* remoteServerIP = "174.95.205.184";  
+const char* remoteServerIP = "172.20.10.4";  
+const uint16_t remoteServerPort = 23456;
+WiFiClient client;
+
+
+
+
+
+int currentLayer = 0;  // 当前层数
+int targetLayer = 0 ;   // 目标层数
+int currentCol = 0;    // 当前列数
+int targetCol = 0 ;     // 目标列数
+
+bool isLayerSet = false;  // 标记目标层数是否已设置
+bool isColSet = false;    // 标记目标列数是否已设置
+bool isLayerComplete = false;  // 标记层数检测是否完成
+bool isColComplete = false;    // 标记列数检测是否完成
+
+void setup() {
+  Serial.begin(115200);  // 初始化串口通信
+  pinMode(SENSOR_PIN, INPUT);    // 配置传感器引脚为输入
+  pinMode(LED_ROW_PIN, OUTPUT);  // 配置行LED1为输出
+  pinMode(LED_COL_PIN, OUTPUT);  // 配置列LED2为输出
+  pinMode(LED_COMPLETE_PIN, OUTPUT);  // 配置完成LED3为输出
+  digitalWrite(LED_COMPLETE_PIN, LOW);  // 初始化完成LED3为关闭
+////wifi commun
+  Serial.setDebugOutput(true);
+  Serial.println();
+  WiFi.begin(ssid, password);
+  WiFi.setSleep(false);
+  while (WiFi.status() != WL_CONNECTED) {
+    delay(500);
+    Serial.print(".");
+  }
+  Serial.println("");
+  Serial.println("WiFi connected");
+
+  
+  Serial.print("Use 'http://");
+  Serial.print(WiFi.localIP());
+  Serial.println("' to connect");
+  server.begin();
+  Serial.println("TCP 服务器已启动，等待客户端连接...");
+  if (client.connect(remoteServerIP, remoteServerPort)) {
+    Serial.println("成功连接到远程服务器!");
+  } else {
+    Serial.print("连接远程服务器失败! IP: ");
+    Serial.println(WiFi.status());
+    Serial.print(remoteServerIP);
+    Serial.print(", 端口: ");
+    Serial.println(remoteServerPort);
+  }
+
+
+/////////
+
+  Serial.println("请输入目标层数（1到4之间），然后按回车：");
+}
+
+void loop() {
+
+int  Row = 0;
+int Collomn = 0;
+
+
+/////wifi commun 
+WiFiClient serverClient = server.available();
+if (serverClient){    Serial.println("客户端已连接!")    ;    
+
+
+
+while (serverClient.connected()) {
+      if (serverClient.available()) {
+        String received = serverClient.readStringUntil('\n');
+        received.trim();
+        Serial.println("从客户端收到的消息: " + received);
+        String reply = "ESP32 收到并处理: " + received;
+        serverClient.println(reply);
+        Serial.println("回传消息给客户端: " + reply);
+        
+        int commaIndex= received.indexOf('，');
+        String part1 = received.substring(0,commaIndex);
+        String part2 = received.substring(commaIndex+1);
+        Row = part1.toInt();
+        Collomn = part2.toInt();
+        
+        
+        }            
+           }
+           serverClient.stop(); Serial.println("disconnected");  }
+
+
+if (client.connected()) {
+    // 发送消息到远程服务器
+    client.println("你好，远程服务器！这是ESP32。");
+    Serial.println("消息已发送到远程服务器: 你好，远程服务器！");
+
+    // 接收远程服务器的回复
+    if (client.available()) {
+      String serverReply = client.readStringUntil('\n');
+      Serial.println("远程服务器的回复: " + serverReply);
+    }
+  } else {
+    // 如果连接断开，尝试重新连接
+    Serial.println("与远程服务器断开连接，尝试重新连接...");
+    if (client.connect(remoteServerIP, remoteServerPort)) {
+      Serial.println("重新连接到远程服务器成功!");
+    } else {
+      Serial.println("重新连接失败!");
+    }
+  }
+
+
+
+
+
+
+  /////
+  // 用户输入目标层数
+  /*if (!isLayerSet) {
+    if (Serial.available() > 0) {
+      int inputLayer = Serial.parseInt();
+      while (Serial.available() > 0) Serial.read();  // 清空串口缓冲区
+
+      if (inputLayer >= 1 && inputLayer <= 4) {
+        targetLayer = inputLayer;
+        isLayerSet = true;
+        Serial.print("目标层数设置为：");
+        Serial.println(targetLayer);
+        Serial.println("请输入目标列数（1到4之间），然后按回车：");
+      } else {
+        Serial.println("无效输入，请输入有效的目标层数（1到4之间）：");
+      }
+    }
+    return;
+  }*/
+  if(Row > 0){
+      targetLayer  = Row;
+  }
+  
+
+
+  // 用户输入目标列数
+  /*
+  if (!isColSet) {
+    if (Serial.available() > 0) {
+      int inputCol = Serial.parseInt();
+      while (Serial.available() > 0) Serial.read();  // 清空串口缓冲区
+
+      if (inputCol >= 1 && inputCol <= 4) {
+        targetCol = inputCol;
+        isColSet = true;
+        Serial.print("目标列数设置为：");
+        Serial.println(targetCol);
+        Serial.println("开始检测行数...");
+      } else {
+        Serial.println("无效输入，请输入有效的目标列数（1到4之间）：");
+      }
+    }
+    return;
+  }*/
+  if(Collomn > 0 ){
+     targetCol = Collomn;
+  }
+
+Serial.println(targetLayer);
+Serial.println(Row);
+Serial.println(targetCol);
+while(targetCol!=0 && targetLayer !=0){
+
+
+  // 检测行数
+  if (!isLayerComplete) {
+    int sensorValue = analogRead(SENSOR_PIN);  // 读取传感器值
+    Serial.println(SENSOR_PIN);
+    Serial.println(sensorValue);
+    Serial.println(analogRead(SENSOR_PIN));
+    if (sensorValue < DIST_THRESHOLD) {
+
+      if (currentLayer < targetLayer) {
+        currentLayer++;
+        Serial.print("当前行数：");
+        Serial.println(currentLayer);
+
+        // 闪烁行LED1
+        digitalWrite(LED_ROW_PIN, HIGH);
+        delay(200);
+        digitalWrite(LED_ROW_PIN, LOW);
+        delay(200);
+      }
+
+      if (currentLayer == targetLayer) {
+        Serial.println("目标行数检测完成，开始检测列数...");
+        isLayerComplete = true;  // 行数检测完成
+        currentLayer = 0;        // 重置当前层数
+      }
+    }
+    delay(200);  // 避免快速检测
+    return;
+  }
+
+  // 检测列数
+  if (!isColComplete) {
+    int sensorValue = analogRead(SENSOR_PIN);  // 读取传感器值
+    Serial.println(analogRead(SENSOR_PIN));
+    delay(500);
+    if (sensorValue < DIST_THRESHOLD) {
+      if (currentCol < targetCol) {
+        currentCol++;
+        Serial.print("当前列数：");
+        Serial.println(currentCol);
+
+        // 闪烁列LED2
+        digitalWrite(LED_COL_PIN, HIGH);
+        delay(200);
+        digitalWrite(LED_COL_PIN, LOW);
+        delay(200);
+      }
+
+      if (currentCol == targetCol) {
+        Serial.println("目标列数检测完成...");
+        isColComplete = true;  // 列数检测完成
+      }
+    }
+    delay(200);  // 避免快速检测
+    return;
+  }
+
+  // 行列检测完成后，分别闪烁目标次数，并点亮完成LED3
+  if (isLayerComplete && isColComplete) {
+    Serial.println("行数和列数检测完成，开始闪灯...");
+
+    // LED1闪烁目标行数的次数
+    for (int i = 0; i < targetLayer; i++) {
+      digitalWrite(LED_ROW_PIN, HIGH);
+      delay(200);
+      digitalWrite(LED_ROW_PIN, LOW);
+      delay(200);
+    }
+
+    // LED2闪烁目标列数的次数
+    for (int i = 0; i < targetCol; i++) {
+      digitalWrite(LED_COL_PIN, HIGH);
+      delay(200);
+      digitalWrite(LED_COL_PIN, LOW);
+      delay(200);
+    }
+
+    // 点亮完成LED3
+    digitalWrite(LED_COMPLETE_PIN, HIGH);  // 使LED3常亮
+    Serial.println("所有目标已完成！完成指示灯已点亮。");
+    delay(500);
+    digitalWrite(LED_COMPLETE_PIN, LOW);
+    delay(10000);
+    
+    
+    
+
+
+    Serial.println("请输入新的目标层数和列数：");
+     // 等待新输入时不关闭完成灯
+  }
+  
+
+
+
+}
+}
+
+void resetState() {
+  targetLayer = 0;
+  targetCol = 0;
+  currentLayer = 0;
+  currentCol = 0;
+  isLayerSet = false;
+  isColSet = false;
+  isLayerComplete = false;
+  isColComplete = false;
+
+  // 在输入新的目标值时关闭完成指示灯
+  digitalWrite(LED_COMPLETE_PIN, LOW);
+}
+
